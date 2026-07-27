@@ -1,6 +1,6 @@
 {
   "name": "foss-tsp-tools",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "private": true,
   "type": "module",
   "scripts": {
@@ -10,7 +10,6 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "bump-version": "npm run lint && npx changelogen@latest --release && git push --follow-tags",
     "lint": "eslint ."
   },
   "dependencies": {

@@ -1,6 +1,23 @@
 # Changelog
 
 
+## v1.3.1
+
+[compare changes](https://github.com/thespielplatz/foos-tsp-tools/compare/v1.3.0...v1.3.1)
+
+### 💅 Refactors
+
+- Replace @thespielplatz/nuxt-dev-base with in-repo implementation ([c53b168](https://github.com/thespielplatz/foos-tsp-tools/commit/c53b168))
+
+### 🏡 Chore
+
+- Eslint fix ([a6f0918](https://github.com/thespielplatz/foos-tsp-tools/commit/a6f0918))
+
+### ❤️ Contributors
+
+- Inf0matics <fil@thespielplatz.com>
+- Thespielplatz <informatics@gmx.net>
+
 ## v1.3.0
 
 [compare changes](https://github.com/thespielplatz/foos-tsp-tools/compare/v1.2.1...v1.3.0)
