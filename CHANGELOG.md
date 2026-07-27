@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v1.4.0
+
+[compare changes](https://github.com/inf0matics/foss-tsp-tools/compare/v1.3.2...v1.4.0)
+
+### 🚀 Enhancements
+
+- Redesign UI and add QR code export options ([baf8c4a](https://github.com/inf0matics/foss-tsp-tools/commit/baf8c4a))
+
+### ❤️ Contributors
+
+- Inf0matics <fil@thespielplatz.com>
+
 ## v1.3.2
 
 [compare changes](https://github.com/inf0matics/foss-tsp-tools/compare/v1.3.1...v1.3.2)
