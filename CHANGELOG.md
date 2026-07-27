@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v1.3.2
+
+[compare changes](https://github.com/inf0matics/foss-tsp-tools/compare/v1.3.1...v1.3.2)
+
+### 🩹 Fixes
+
+- Imprint link navigates and move privacy policy to its own page ([4268e26](https://github.com/inf0matics/foss-tsp-tools/commit/4268e26))
+
+### ❤️ Contributors
+
+- Inf0matics <fil@thespielplatz.com>
+
 ## v1.3.1
 
 [compare changes](https://github.com/thespielplatz/foos-tsp-tools/compare/v1.3.0...v1.3.1)
