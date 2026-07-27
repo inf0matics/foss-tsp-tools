@@ -2,7 +2,21 @@
 @import "@nuxt/ui";
 
 
-@theme static { 
+@theme static {
   --color-myprimary: #C56200;
   --color-myprimary-lighter: #E67300;
+
+  --color-footer-50: #f9fafb;
+  --color-footer-100: #f3f4f6;
+  --color-footer-200: #e5e7eb;
+  --color-footer-300: #d1d5db;
+  --color-footer-400: #9ca3af;
+  --color-footer-500: #6b7280;
+  --color-footer-600: #4b5563;
+  --color-footer-700: #374151;
+  --color-footer-800: #1f2937;
+  --color-footer-900: #111827;
+  --color-footer-950: #030712;
+  --ui-footer: var(--color-footer-500);
+  --ui-footer-hover: var(--color-footer-800);
 }
