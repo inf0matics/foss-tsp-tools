@@ -28,6 +28,7 @@
     "tiny-secp256k1": "2.2.3"
   },
   "devDependencies": {
+    "@iconify-json/ph": "^1.2.2",
     "@nuxt/eslint-config": "^1.2.0",
     "@types/bs58": "^4.0.4",
     "@types/qrcode-svg": "^1.1.5",

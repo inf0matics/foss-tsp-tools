@@ -1,61 +1,82 @@
 <template>
-  <div class="pt-20">
-    <div class="text-2xl font-black">
-      Password Generator
-    </div>
-    <USeparator />
-    <div class="pt-5 flex gap-2">
-      <div class="flex flex-col gap-2">
+  <div>
+    <ToolHeader
+      title="Password Generator"
+      description="Build strong passwords with fine-grained control over character sets. Generated locally, never sent anywhere."
+    />
+
+    <div class="grid gap-6 sm:grid-cols-2">
+      <div class="flex flex-col gap-3">
         <UFormField label="Length">
-          <UInputNumber v-model="passwordLength" />
+          <UInputNumber
+            v-model="passwordLength"
+            :min="1"
+            class="w-full"
+          />
         </UFormField>
-        <UFormField label="Include Symbols">
-          <UInput v-model="symbols" />
+        <UFormField label="Include symbols">
+          <UInput
+            v-model="symbols"
+            class="w-full font-mono"
+          />
         </UFormField>
       </div>
-      <div class="flex flex-col gap-2">
+      <div class="flex flex-col justify-center gap-2">
         <UCheckbox
           v-model="allowLowercase"
-          label="Allow Lowercase (abc)"
+          label="Allow lowercase (abc)"
         />
         <UCheckbox
           v-model="allowUppercase"
-          label="Allow Uppercase (ABC)"
+          label="Allow uppercase (ABC)"
         />
         <UCheckbox
           v-model="allowNumbers"
-          label="Allow Numbers (0-9)"
+          label="Allow numbers (0-9)"
         />
         <UCheckbox
           v-model="excludeSimilar"
-          label="Exclude Similar (iI1loO0)"
+          label="Exclude similar (iI1loO0)"
         />
         <UCheckbox
           v-model="excludeDuplicate"
-          label="Exclude Duplicate Characters"
+          label="Exclude duplicate characters"
         />
       </div>
     </div>
-    <div class="h-6" />
+
     <UButton
-      icon="i-material-symbols-settings-outline-rounded"
+      class="mt-6"
+      icon="i-ph-arrows-clockwise"
       @click="generatePassword"
     >
       Generate
     </UButton>
-    <div class="h-6" />
-    <UFormField :label="`Password (length: ${generatedPassword.length || ''})`">
-      <UTextarea
-        v-model="generatedPassword"
-        class="w-full"
-        color="neutral"
-        disabled
-      />
+
+    <UFormField
+      class="mt-6"
+      :label="generatedPassword ? `Password · ${generatedPassword.length} chars` : 'Password'"
+    >
+      <div class="flex flex-col gap-2 sm:flex-row sm:items-start">
+        <UTextarea
+          v-model="generatedPassword"
+          class="w-full font-mono"
+          :rows="2"
+          readonly
+          placeholder="Click Generate to create a password"
+        />
+        <CopyButton :text="generatedPassword" />
+      </div>
     </UFormField>
   </div>
 </template>
 
 <script setup lang="ts">
+useSeoMeta({
+  title: 'Password Generator',
+  description: 'Build strong passwords with fine-grained character rules, generated entirely in your browser.',
+})
+
 const LOCALSTORAGE_PREFIX = 'password-generator-config'
 const KEY_LENGTH = 'length'
 const { $localStorage } = useNuxtApp()

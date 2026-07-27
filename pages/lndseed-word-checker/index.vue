@@ -1,65 +1,96 @@
 <template>
-  <div class="pt-20">
-    <div class="text-2xl font-black">
-      Seed Word Checker
-    </div>
-    <div class="pt-10">
-      <UTextarea
-        v-model="text"
-        class="w-full"
-        placeholder="Please enter seed words here to check"
-        :rows="8"
+  <div>
+    <ToolHeader
+      title="LND Seed Checker"
+      description="Validate aezeed mnemonic words for Lightning LND wallets. Your words are checked locally and never sent anywhere."
+    />
+
+    <UAlert
+      color="warning"
+      variant="soft"
+      icon="i-ph-warning-duotone"
+      title="Only use this if you know why you need it"
+      description="This tool is for people who understand aezeed seeds. If that isn't you, please don't paste a real seed here."
+      class="mb-6"
+    />
+
+    <UTextarea
+      v-model="text"
+      class="w-full font-mono"
+      placeholder="Enter seed words, separated by spaces, commas or new lines…"
+      :rows="6"
+      autofocus
+    />
+
+    <div class="mt-8">
+      <p
+        v-if="!text.trim()"
+        class="text-center text-sm text-muted"
+      >
+        Validation results will appear here.
+      </p>
+
+      <UAlert
+        v-else-if="unknownWords.length === 0"
+        color="success"
+        variant="soft"
+        icon="i-ph-seal-check-duotone"
+        :title="`All ${wordCount} words are valid`"
       />
+
+      <UAlert
+        v-else
+        color="error"
+        variant="soft"
+        icon="i-ph-x-circle"
+        :title="`${unknownWords.length} unknown word${unknownWords.length === 1 ? '' : 's'}`"
+      >
+        <template #description>
+          <div class="mt-1 flex flex-wrap gap-1.5">
+            <UBadge
+              v-for="word in unknownWords"
+              :key="word"
+              color="error"
+              variant="soft"
+              class="font-mono"
+            >
+              {{ word }}
+            </UBadge>
+          </div>
+        </template>
+      </UAlert>
     </div>
 
-    <div class="flex justify-center pt-10">
-      <!-- eslint-disable vue/no-v-html -->
-      <div v-html="result" />
-      <!-- eslint-enable vue/no-v-html -->
-    </div>
-    <div class="flex justify-center">
-      <div class="font-bold pt-10 ">
-        ⚠️ IF YOU DON'T KNOW WHY YOU SHOULD USE THIS TOOL, PLEASE DO NOT USE IT! ⚠️
-      </div>
-    </div>
-    <div class="pt-10">
-      For <a
+    <p class="mt-8 text-sm text-muted">
+      Word list reference:
+      <a
         href="https://github.com/lightningnetwork/lnd/tree/master/aezeed"
-        class="underline"
+        target="_blank"
+        rel="noopener"
+        class="underline underline-offset-4 decoration-primary/40 hover:decoration-primary"
       >aezeed</a>
-    </div>
+    </p>
   </div>
 </template>
 
 <script setup lang="ts">
-const result = ref('')
+useSeoMeta({
+  title: 'LND Seed Checker',
+  description: 'Validate aezeed mnemonic words for Lightning LND wallets, entirely in your browser.',
+})
+
 const text = ref('')
 
-watch(text, (newValue) => {
-  updateResult(newValue)
-})
-
-onMounted(async () => {
-  updateResult('')
-})
-
-const updateResult = (text: string) => {
-  if (text.trim() === '') {
-    result.value = '<i>Please enter word list</i>'
-    return
-  }
-
-  const inputWords = text
-    .split(/[\n,]/)
+const inputWords = computed(() =>
+  text.value
+    .split(/[\s,]+/)
     .map(w => w.trim())
-    .filter(w => w !== '')
+    .filter(w => w !== ''),
+)
 
-  const unknownWords = inputWords.filter(word => !englishWordList.includes(word))
+const wordCount = computed(() => inputWords.value.length)
 
-  if (unknownWords.length === 0) {
-    result.value = '<i>All words are valid</i>'
-  } else {
-    result.value = `Unknown words (${unknownWords.length}):<br>${unknownWords.join('<br>')}`
-  }
-}
+const unknownWords = computed(() =>
+  inputWords.value.filter(word => !englishWordList.includes(word)),
+)
 </script>

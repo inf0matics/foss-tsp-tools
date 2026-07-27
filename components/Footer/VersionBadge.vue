@@ -3,30 +3,35 @@
     v-if="tagLink"
     :to="tagLink"
     target="_blank"
-    variant="link"
+    variant="ghost"
+    color="neutral"
+    size="sm"
+    class="px-0"
   >
     <UBadge
-      variant="outline"
-      color="footer"
-      class="px-2 rounded-full bg-transparent hover:text-[var(--ui-footer-hover)]"
+      variant="soft"
+      color="neutral"
+      class="rounded-full tabular-nums"
     >
       {{ version }}
     </UBadge>
   </UButton>
   <UBadge
     v-else
-    class="px-2"
+    variant="soft"
+    color="neutral"
+    class="rounded-full tabular-nums"
   >
     {{ version }}
   </UBadge>
 </template>
 
 <script setup lang="ts">
-import { useRuntimeConfig } from '#imports'
-
 const { public: { devBase } } = useRuntimeConfig()
 
-const version = devBase.version ? `v${devBase.version}` : 'undefined'
-const releasedVersion = devBase.releasedVersion ? `v${devBase.releasedVersion}` : 'undefined'
-const tagLink = devBase.githubLink ? `${devBase.githubLink}/releases/tag/${releasedVersion}` : ''
+const version = devBase.version ? `v${devBase.version}` : 'dev'
+const releasedVersion = devBase.releasedVersion ? `v${devBase.releasedVersion}` : ''
+const tagLink = devBase.githubLink && releasedVersion
+  ? `${devBase.githubLink}/releases/tag/${releasedVersion}`
+  : ''
 </script>

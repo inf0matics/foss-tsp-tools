@@ -2,8 +2,9 @@
   <UButton
     :to="legalNoticeUrl"
     variant="link"
-    color="footer"
-    class="hover:underline"
+    color="neutral"
+    size="sm"
+    class="text-muted hover:text-default"
   >
     Legal Notice
   </UButton>
@@ -11,7 +12,5 @@
 </template>
 
 <script setup lang="ts">
-import { useRuntimeConfig } from '#imports'
-
 const legalNoticeUrl = useRuntimeConfig().public.legalNoticeUrl
 </script>

@@ -2,8 +2,9 @@
   <UButton
     to="/privacy-policy"
     variant="link"
-    color="footer"
-    class="hover:underline"
+    color="neutral"
+    size="sm"
+    class="text-muted hover:text-default"
   >
     Privacy Policy
   </UButton>

@@ -1,93 +1,113 @@
 <template>
-  <div class="pt-10">
-    <div class="text-2xl font-black">
-      LNURL Web Wallet
-    </div>
-  </div>
-  <div class="pt-5">
-    <div class="flex gap-1 items-center">
-      <div class="text-xl font-bold">
-        Wallet
-      </div>
-    </div>
-    <UTextarea
-      v-if="seedVisible"
-      v-model="wallet"
-      placeholder="seed"
-      class="w-full"
+  <div class="space-y-8">
+    <ToolHeader
+      title="LNURL Web Wallet"
+      description="Generate a seed and sign LNURL-auth logins. Everything happens client-side — your seed never leaves this device."
     />
-    <UTextarea
-      v-else
-      class="w-full blur-sm"
-      :value="replaceCharacters(wallet, '#')"
-    />
-    <div class="flex gap-1 pt-2">
-      <UButton
-        icon="i-iconoir-plus-square-solid"
-        @click="generateNewWallet"
-      >
-        New
-      </UButton>
-      <UButton
-        :icon="seedVisible ? 'i-iconoir-eye-solid' : 'i-iconoir-eye-closed'"
-        @click="toggleSeedVisibility"
-      >
+
+    <section>
+      <h2 class="mb-2 text-sm font-medium uppercase tracking-wide text-muted">
         Seed
-      </UButton>
-      <UButton
-        :icon="autoSave ? 'i-iconoir-save-action-floppy' : 'i-iconoir-save-floppy-disk'"
-        @click="toggleAutoSave"
+      </h2>
+      <UTextarea
+        v-if="seedVisible"
+        v-model="wallet"
+        placeholder="seed"
+        class="w-full font-mono"
+        :rows="3"
+      />
+      <UTextarea
+        v-else
+        class="w-full font-mono blur-sm select-none"
+        :rows="3"
+        :model-value="replaceCharacters(wallet, '#')"
+        readonly
+      />
+      <div class="mt-3 flex flex-wrap gap-2">
+        <UButton
+          icon="i-ph-plus-circle"
+          @click="generateNewWallet"
+        >
+          New
+        </UButton>
+        <UButton
+          :icon="seedVisible ? 'i-ph-eye-slash' : 'i-ph-eye'"
+          color="neutral"
+          variant="subtle"
+          @click="toggleSeedVisibility"
+        >
+          {{ seedVisible ? 'Hide seed' : 'Show seed' }}
+        </UButton>
+        <UButton
+          :icon="autoSave ? 'i-ph-floppy-disk-back' : 'i-ph-floppy-disk'"
+          :color="autoSave ? 'primary' : 'neutral'"
+          :variant="autoSave ? 'solid' : 'subtle'"
+          @click="toggleAutoSave"
+        >
+          Autosave: {{ autoSave ? 'on' : 'off' }}
+        </UButton>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="mb-2 text-sm font-medium uppercase tracking-wide text-muted">
+        LNURL
+      </h2>
+      <UTextarea
+        v-model="lnurl"
+        class="w-full font-mono"
+        :rows="3"
+        placeholder="Paste your lnurl here"
+      />
+      <p
+        v-if="lnurl.trim()"
+        class="mt-2 text-sm text-muted"
       >
-        Autosave: <span>{{ autoSave ? 'ON ' : 'OFF' }}</span>
-      </UButton>
-    </div>
-  </div>
-  <div class="pt-5">
-    <div class="text-xl font-bold">
-      LNURL
-    </div>
-    <textarea
-      v-model="lnurl"
-      class="w-full h-20 border-2 border-gray-300 rounded-lg p-2"
-      placeholder="Paste your lnurl here"
+        Type: <span class="font-medium text-default">{{ lnurlType || '…' }}</span>
+      </p>
+    </section>
+
+    <section
+      v-if="lnurlType == 'auth'"
+      class="space-y-3"
+    >
+      <p class="text-sm text-muted">
+        Derivation path: <span class="font-mono text-default">{{ derivationPath }}</span>
+      </p>
+      <div class="flex flex-wrap gap-2">
+        <UButton
+          icon="i-ph-arrow-square-out"
+          color="neutral"
+          variant="subtle"
+          @click="authLoginViaNewTab"
+        >
+          Login via new tab
+        </UButton>
+        <UButton
+          icon="i-ph-sign-in"
+          @click="authLoginViaBackend"
+        >
+          Login via backend
+        </UButton>
+      </div>
+    </section>
+
+    <UAlert
+      v-if="loginResult != null"
+      :color="loginResult ? 'success' : 'error'"
+      variant="soft"
+      :icon="loginResult ? 'i-ph-check-circle' : 'i-ph-x-circle'"
+      :title="loginResult ? 'Login succeeded' : 'Login failed'"
     />
-    <div>
-      <span class="font-bold">Type: </span>{{ lnurlType }}
-    </div>
-  </div>
-  <div
-    v-if="false && lnurlType == 'none'"
-    class="pt-5"
-  >
-    <div>Not Implemented</div>
-  </div>
-  <div v-if="lnurlType == 'auth'">
-    <div>
-      <span class="font-bold">Derivation Path: </span><span class="font-mono">{{ derivationPath }}</span>
-    </div>
-    <div class="flex gap-1">
-      <UButton
-        icon="i-iconoir-arrow-up-circle-solid"
-        @click="authLoginViaNewTab"
-      >
-        Login<span class="italic text-xs">(Request via new tab)</span>
-      </UButton>
-      <UButton
-        icon="i-iconoir-arrow-right-circle-solid"
-        @click="authLoginViaBackend"
-      >
-        Login<span class="italic text-xs">(Request via Backend)</span>
-      </UButton>
-    </div>
-  </div>
-  <div v-if="loginResult != null">
-    <div>
-      <span class="font-bold">Result: </span><span :class="loginResult ? 'text-green-600' : 'text-red-700'">{{ loginResult }}</span>
-    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
+useSeoMeta({
+  title: 'LNURL Web Wallet',
+  description: 'Generate a seed and sign LNURL-auth logins entirely client-side. Your seed never leaves your device.',
+})
+
 const toast = useToast()
 
 const LOCALSTORAG_KEY_MNEMONIC = 'mnemonic'
