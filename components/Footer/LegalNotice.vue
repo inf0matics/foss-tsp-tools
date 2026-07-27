@@ -1,7 +1,6 @@
 <template>
   <UButton
     :to="legalNoticeUrl"
-    target="_blank"
     variant="link"
     color="footer"
     class="hover:underline"
